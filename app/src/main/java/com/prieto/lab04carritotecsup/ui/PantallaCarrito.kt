@@ -3,8 +3,6 @@ package com.prieto.lab04carritotecsup.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -131,10 +129,11 @@ fun TarjetaProducto(
             )
 
             IconButton(onClick = onEliminar) {
-                Icon(
-                    imageVector = Icons.Default.Clear,
-                    contentDescription = "Eliminar",
-                    tint = MaterialTheme.colorScheme.error
+                Text(
+                    text = "✕",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.error,
+                    fontWeight = FontWeight.Bold
                 )
             }
         }
