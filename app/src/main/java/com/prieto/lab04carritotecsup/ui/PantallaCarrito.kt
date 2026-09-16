@@ -1,5 +1,6 @@
 package com.prieto.lab04carritotecsup.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -20,156 +21,182 @@ fun PantallaCarrito(modifier: Modifier = Modifier) {
 
     val productos = remember { mutableStateListOf<Producto>() }
 
+    val moradoHeader = Color(0xFF5E4B99)
+    val moradoBoton = Color(0xFF6251A2)
+    val fondoTotales = Color(0xFFF2EFF8)
+
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp)
+        modifier = modifier.fillMaxSize()
     ) {
-        Text(
-            text = "Mi Carrito TECSUP",
-            style = MaterialTheme.typography.headlineSmall
-        )
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        OutlinedTextField(
-            value = nombre,
-            onValueChange = { nombre = it },
-            label = { Text("Nombre del producto") },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        // TopBar Morada
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(moradoHeader)
+                .statusBarsPadding()
+                .padding(horizontal = 16.dp, vertical = 20.dp)
         ) {
+            Text(
+                text = "Mi Carrito TECSUP",
+                style = MaterialTheme.typography.titleLarge,
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(16.dp)
+        ) {
+            // Formulario
             OutlinedTextField(
-                value = precio,
-                onValueChange = { precio = it },
-                label = { Text("Precio") },
-                modifier = Modifier.weight(1f)
+                value = nombre,
+                onValueChange = { nombre = it },
+                placeholder = { Text("Nombre del producto") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
             )
-            OutlinedTextField(
-                value = cantidad,
-                onValueChange = { cantidad = it },
-                label = { Text("Cantidad") },
-                modifier = Modifier.weight(1f)
-            )
-        }
 
-        Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-        Button(
-            onClick = {
-                val precioNum = precio.toDoubleOrNull() ?: 0.0
-                val cantidadNum = cantidad.toIntOrNull() ?: 0
-                if (nombre.isNotBlank() && precioNum > 0 && cantidadNum > 0) {
-                    productos.add(Producto(nombre, precioNum, cantidadNum))
-                    nombre = ""
-                    precio = ""
-                    cantidad = ""
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("AGREGAR")
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        if (productos.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                contentAlignment = Alignment.Center
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        text = "El carrito está vacío",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = Color.Gray
-                    )
-                    Text(
-                        text = "Agrega productos arriba para comenzar",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Gray
-                    )
-                }
-            }
-        } else {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                items(productos) { producto ->
-                    TarjetaProducto(
-                        producto = producto,
-                        onEliminar = { productos.remove(producto) }
-                    )
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        val subtotal = productos.sumOf { it.precio * it.cantidad }
-        val igv = subtotal * 0.18
-        val total = subtotal + igv
-
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant
-            )
-        ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text(
-                    text = "Productos: ${productos.size}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Gray
+                OutlinedTextField(
+                    value = precio,
+                    onValueChange = { precio = it },
+                    placeholder = { Text("Precio (S/)") },
+                    modifier = Modifier.weight(1f),
+                    singleLine = true
                 )
+                OutlinedTextField(
+                    value = cantidad,
+                    onValueChange = { cantidad = it },
+                    placeholder = { Text("Cantidad") },
+                    modifier = Modifier.weight(1f),
+                    singleLine = true
+                )
+            }
 
-                Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
+            Button(
+                onClick = {
+                    val precioNum = precio.toDoubleOrNull() ?: 0.0
+                    val cantidadNum = cantidad.toIntOrNull() ?: 0
+                    if (nombre.isNotBlank() && precioNum > 0 && cantidadNum > 0) {
+                        productos.add(Producto(nombre, precioNum, cantidadNum))
+                        nombre = ""
+                        precio = ""
+                        cantidad = ""
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = moradoBoton)
+            ) {
+                Text(
+                    text = "AGREGAR",
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Lista / Estado vacío
+            if (productos.isEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Text("Subtotal:")
-                    Text("S/ ${"%.2f".format(subtotal)}")
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text = "Tu carrito está vacío",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.DarkGray
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "Agrega tu primer producto",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color.Gray
+                        )
+                    }
                 }
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    Text("IGV (18%):")
-                    Text("S/ ${"%.2f".format(igv)}")
+                    items(productos) { producto ->
+                        TarjetaProducto(
+                            producto = producto,
+                            onEliminar = { productos.remove(producto) }
+                        )
+                    }
                 }
+            }
 
-                Divider(modifier = Modifier.padding(vertical = 8.dp))
+            // Panel de Totales
+            val subtotal = productos.sumOf { it.precio * it.cantidad }
+            val igv = subtotal * 0.18
+            val total = subtotal + igv
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = fondoTotales)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "TOTAL:",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
+                        text = "Productos: ${productos.size}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.Gray
                     )
-                    Text(
-                        text = "S/ ${"%.2f".format(total)}",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
-                    )
+
+                    if (productos.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text("Subtotal", style = MaterialTheme.typography.bodyMedium, color = Color.DarkGray)
+                            Text("S/ ${"%.2f".format(subtotal)}", style = MaterialTheme.typography.bodyMedium, color = Color.DarkGray)
+                        }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text("IGV (18%)", style = MaterialTheme.typography.bodyMedium, color = Color.DarkGray)
+                            Text("S/ ${"%.2f".format(igv)}", style = MaterialTheme.typography.bodyMedium, color = Color.DarkGray)
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "TOTAL",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black
+                        )
+                        Text(
+                            text = "S/ ${"%.2f".format(total)}",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = moradoBoton
+                        )
+                    }
                 }
             }
         }
@@ -181,7 +208,11 @@ fun TarjetaProducto(
     producto: Producto,
     onEliminar: () -> Unit
 ) {
-    Card(modifier = Modifier.fillMaxWidth()) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+    ) {
         Row(
             modifier = Modifier
                 .padding(16.dp)
@@ -192,8 +223,10 @@ fun TarjetaProducto(
                 Text(
                     text = producto.nombre,
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
                 )
+                Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = "S/ ${"%.2f".format(producto.precio)} x ${producto.cantidad}",
                     style = MaterialTheme.typography.bodyMedium,
@@ -206,15 +239,15 @@ fun TarjetaProducto(
                 text = "S/ ${"%.2f".format(subtotal)}",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
+                color = Color(0xFF4A3E85),
                 modifier = Modifier.padding(end = 8.dp)
             )
 
             IconButton(onClick = onEliminar) {
                 Text(
-                    text = "✕",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.error,
-                    fontWeight = FontWeight.Bold
+                    text = "🗑",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = Color(0xFF9E3A3A)
                 )
             }
         }
