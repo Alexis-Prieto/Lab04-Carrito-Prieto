@@ -5,11 +5,7 @@ plugins {
 
 android {
     namespace = "com.prieto.lab04carritotecsup"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 37 // <-- Cambiado directamente a 37
 
     defaultConfig {
         applicationId = "com.prieto.lab04carritotecsup"
