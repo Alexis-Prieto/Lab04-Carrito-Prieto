@@ -5,12 +5,15 @@ Estudiante: Alexis Prieto
 ## Descripción
 App en Jetpack Compose para administrar un carrito de compras. Permite ingresar productos con su precio y cantidad, mostrarlos en una lista, borrarlos uno a uno y calcular de forma automática el subtotal, IGV y total.
 
----
-
 ## Capturas de Pantalla
-(Pendiente de agregar)
 
----
+**Captura de la interfaz vacia (sin productos)**
+
+<img width="297" height="685" alt="image" src="https://github.com/user-attachments/assets/7175a538-198e-453e-be4a-9231655d958e" />
+
+**Captura de la interfaz con productos añadidos**
+
+<img width="337" height="742" alt="image" src="https://github.com/user-attachments/assets/e1b0dd10-a03f-4441-bfb4-cec5af50e6ce" />
 
 ## Cuestionario / Respuestas Conceptuales
 
